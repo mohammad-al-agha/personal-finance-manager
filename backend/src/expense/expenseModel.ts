@@ -14,6 +14,9 @@ export enum ExpenseCategories {
 @Schema()
 export class Expense {
   @Prop({ required: true })
+  title: string;
+
+  @Prop({ required: true })
   amount: number;
 
   @Prop({ required: true })
