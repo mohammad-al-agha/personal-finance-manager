@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type IncomeDocument = HydratedDocument<Income>;
 
-enum IncomeCategories {
+export enum IncomeCategories {
   SALARY = 'Salary',
   BONUS = 'Bonus',
   FREELANCE = 'Freelance',
