@@ -12,8 +12,9 @@ export class ExpenseService {
   ) {}
 
   async addExpense(createExpenseDto: createExpenseDTO): Promise<Expense> {
-    const { amount, date, user, category } = createExpenseDto;
+    const { title, amount, date, user, category } = createExpenseDto;
     const expense = new this.expenseModel({
+      title,
       amount,
       date,
       user,
