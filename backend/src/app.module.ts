@@ -4,6 +4,7 @@ import { ExpenseModule } from './expense/expense.module';
 import { IncomeModule } from './income/income.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 require('dotenv').config();
 
 @Module({
@@ -15,6 +16,7 @@ require('dotenv').config();
     ExpenseModule,
     IncomeModule,
     AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
