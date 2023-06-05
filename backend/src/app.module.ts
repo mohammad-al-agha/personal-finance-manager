@@ -5,6 +5,10 @@ import { IncomeModule } from './income/income.module';
 require('dotenv').config();
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.DB_URL), IncomeModule],
+  imports: [
+    MongooseModule.forRoot(process.env.DB_URL),
+    ExpenseModule,
+    IncomeModule,
+  ],
 })
 export class AppModule {}
