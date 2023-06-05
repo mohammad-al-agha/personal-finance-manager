@@ -5,6 +5,7 @@ import { IncomeModule } from './income/income.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { JwtModule } from '@nestjs/jwt';
 require('dotenv').config();
 
 @Module({
@@ -17,6 +18,11 @@ require('dotenv').config();
     IncomeModule,
     AuthModule,
     UsersModule,
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '12h' },
+    }),
   ],
 })
 export class AppModule {}
