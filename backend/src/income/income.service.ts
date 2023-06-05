@@ -11,7 +11,7 @@ export class IncomeService {
     private incomeModel = mongoose.Model<Income>,
   ) {}
 
-  async createIncome(createIncomeDto: createIncomeDTO): Promise<Income> {
+  async addIncome(createIncomeDto: createIncomeDTO): Promise<Income> {
     const { title, amount, date, user, category } = createIncomeDto;
     const income = new this.incomeModel({
       title,
