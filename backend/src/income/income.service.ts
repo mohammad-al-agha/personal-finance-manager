@@ -12,7 +12,10 @@ export class IncomeService {
   ) {}
 
   async addIncome(createIncomeDto: createIncomeDTO): Promise<Income> {
+    //Extracting the props from the DTO
     const { title, amount, date, user, category } = createIncomeDto;
+
+    //creating a new income
     const income = new this.incomeModel({
       title,
       amount,
