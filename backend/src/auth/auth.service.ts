@@ -6,6 +6,7 @@ import { User, UserDocument } from '../users/users.model';
 import { signUpDTO } from './dto/signUpDTO';
 import * as bcrypt from 'bcrypt';
 import { EmailValidation, PasswordValidation } from './dto/regex';
+import { loginDTO } from './dto/loginDTO';
 
 @Injectable()
 export class AuthService {
@@ -54,6 +55,37 @@ export class AuthService {
       password: hashedPassword,
       balance: 0,
     });
+
+    //generating a new token
+    const payload = { userId: user._id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    //creating a new user without exposing the hashed password
+    const userResponse = {
+      userName: user.userName,
+      email: user.email,
+      balance: user.balance,
+      incomes: user.incomes,
+      expenses: user.expenses,
+    };
+
+    return { userResponse, token };
+  }
+
+  async login(data: loginDTO): Promise<object> {
+    // finding the use by ID
+    const user = await this.userModel.findOne({ email: data.email });
+
+    // checking if the user exists
+    if (!user) {
+      throw new HttpException('Invalid Credentials', 400);
+    }
+
+    //comparing the password entered by the user and the password present in the database
+    const isMatched = await bcrypt.compare(data.password, user.password);
+    if (!isMatched) {
+      throw new HttpException('Invalid Credentials', 400);
+    }
 
     //generating a new token
     const payload = { userId: user._id, email: user.email };
