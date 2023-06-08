@@ -12,7 +12,10 @@ export class ExpenseService {
   ) {}
 
   async addExpense(createExpenseDto: createExpenseDTO): Promise<Expense> {
+    //Extracting the props from the DTO
     const { title, amount, date, user, category } = createExpenseDto;
+
+    //creating a new expense
     const expense = new this.expenseModel({
       title,
       amount,
