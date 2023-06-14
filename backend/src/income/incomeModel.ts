@@ -21,8 +21,8 @@ export class Income {
   @Prop({ required: true })
   date: Date;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' }) // Update the type to reference the User model
-  user: UserDocument; // Update the type declaration to UserDocument
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  user: UserDocument;
 
   @Prop()
   category: IncomeCategories;
