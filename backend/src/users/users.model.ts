@@ -3,7 +3,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 import { Income } from 'src/income/incomeModel';
 import { Expense } from 'src/expense/expenseModel';
 
-export type UserDocument = HydratedDocument<User>;
+export type UserDocument = HydratedDocument<User> & Document;
 
 @Schema()
 export class User {
