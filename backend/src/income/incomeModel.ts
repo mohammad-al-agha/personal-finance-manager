@@ -22,7 +22,7 @@ export class Income {
   date: Date;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  user: UserDocument;
+  user: mongoose.Types.ObjectId;
 
   @Prop()
   category: IncomeCategories;
