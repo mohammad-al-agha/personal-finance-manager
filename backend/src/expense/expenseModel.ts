@@ -2,7 +2,7 @@ import mongoose, { HydratedDocument } from 'mongoose';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { UserDocument } from '../users/users.model';
 
-export type ExpenseDocument = HydratedDocument<Expense>;
+export type ExpenseDocument = HydratedDocument<Expense> & Document;
 
 export enum ExpenseCategories {
   FURNITURE = 'Furniture',

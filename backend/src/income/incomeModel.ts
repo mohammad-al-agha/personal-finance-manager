@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, Document } from 'mongoose';
-import { User, UserDocument } from '../users/users.model'; // Replace 'path-to-user-model' with the actual path to your User model file
+import { UserDocument } from '../users/users.model';
 
 export type IncomeDocument = HydratedDocument<Income> & Document;
 
