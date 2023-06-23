@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     return this.validateRequest(req);
   }
 
-  async validateRequest(request: any): Promise<boolean> {
+  async validateRequest(request: Request): Promise<boolean> {
     try {
       const authorization = request.headers['authorization'];
 
@@ -40,7 +40,9 @@ export class AuthGuard implements CanActivate {
 
       const payload = await this.jwtService.verify(token);
 
-      return payload.userId;
+      request['userId'] = payload.userId;
+
+      return true;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }

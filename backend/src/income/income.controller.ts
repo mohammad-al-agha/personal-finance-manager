@@ -5,13 +5,17 @@ import { AuthGuard } from '../auth/auth.guards';
 
 @Controller('income')
 export class IncomeController {
-  constructor(private readonly incomeSevice: IncomeService) {}
+  constructor(private readonly incomeService: IncomeService) {}
 
   @Post()
   @UseGuards(AuthGuard)
-  async createIncome(@Body() createIncomeDto: createIncomeDTO, @Req() request) {
-    const userId = request.user.id;
-    const income = await this.incomeSevice.addIncome(createIncomeDto, userId);
+  async createIncome(
+    @Body() createIncomeDto: createIncomeDTO,
+    @Req() req: Request,
+  ) {
+    const userId = req['userId'];
+
+    const income = await this.incomeService.addIncome(createIncomeDto, userId);
     return { income };
   }
 }
