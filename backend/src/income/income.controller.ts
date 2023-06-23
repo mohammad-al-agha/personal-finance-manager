@@ -4,11 +4,11 @@ import { createIncomeDTO } from './dto';
 import { AuthGuard } from '../auth/auth.guards';
 
 @Controller('income')
+@UseGuards(AuthGuard)
 export class IncomeController {
   constructor(private readonly incomeService: IncomeService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   async createIncome(
     @Body() createIncomeDto: createIncomeDTO,
     @Req() req: Request,
