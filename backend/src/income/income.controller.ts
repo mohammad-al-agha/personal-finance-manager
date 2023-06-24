@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { IncomeService } from './income.service';
-import { createIncomeDTO } from './dto';
+import { createIncomeDTO } from './dto/createIncome';
 import { AuthGuard } from '../auth/auth.guards';
 
 @Controller('income')

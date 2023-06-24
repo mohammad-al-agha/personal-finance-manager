@@ -2,7 +2,7 @@ import { Injectable, Req } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Income } from './incomeModel';
 import mongoose, { Types } from 'mongoose';
-import { createIncomeDTO } from './dto';
+import { createIncomeDTO } from './dto/createIncome';
 import { User, UserDocument } from '../users/users.model';
 
 @Injectable()
