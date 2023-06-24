@@ -50,7 +50,7 @@ export class ExpenseService {
 
     //checking if the user exists
     if (!user) {
-      throw new HttpException('User not found', 400);
+      throw new HttpException('User not found', 404);
     }
 
     return user.expenses;
