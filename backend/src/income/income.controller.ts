@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
 import { IncomeService } from './income.service';
 import { createIncomeDTO } from './dto/createIncome';
 import { AuthGuard } from '../auth/auth.guards';
@@ -17,5 +17,13 @@ export class IncomeController {
 
     const income = await this.incomeService.addIncome(createIncomeDto, userId);
     return { income };
+  }
+
+  @Get()
+  async getIncome(@Req() req: Request) {
+    const userId = req['userId'];
+
+    const incomes = await this.incomeService.getIncomes(userId);
+    return { incomes };
   }
 }
