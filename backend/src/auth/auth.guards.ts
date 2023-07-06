@@ -44,7 +44,10 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'Invalid authorization header format',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 }
