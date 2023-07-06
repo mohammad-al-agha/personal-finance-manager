@@ -55,4 +55,43 @@ export class IncomeService {
 
     return user.incomes;
   }
+
+  async deleteIncome(userId: Types.ObjectId, incomeId: Types.ObjectId) {
+    //getting the user by id
+    const user = await this.userModel.findById(userId);
+
+    //checking if the user exists
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
+    //getting the income by id
+    const income = await this.incomeModel.findById(incomeId);
+
+    //checking if the income exists
+    if (!income) {
+      throw new HttpException('No such income', 404);
+    }
+
+    // Remove the income from the user's income array
+    const removedIncomes = user.incomes.filter(
+      (i) => i.toString() !== incomeId.toString(),
+    );
+
+    //then checking if it was there
+    if (removedIncomes.length === user.incomes.length) {
+      throw new HttpException('No such income for this user', 404);
+    }
+
+    //updating the user's income array
+    user.incomes = removedIncomes;
+
+    //saving all changes
+    await Promise.all([
+      user.save(),
+      this.incomeModel.findByIdAndDelete(incomeId),
+    ]);
+
+    return user.incomes;
+  }
 }
