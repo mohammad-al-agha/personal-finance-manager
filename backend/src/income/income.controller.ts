@@ -1,7 +1,16 @@
-import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Get,
+  Delete,
+} from '@nestjs/common';
 import { IncomeService } from './income.service';
 import { createIncomeDTO } from './dto/createIncome';
 import { AuthGuard } from '../auth/auth.guards';
+import { Types } from 'mongoose';
 
 @Controller('income')
 @UseGuards(AuthGuard)
@@ -24,6 +33,18 @@ export class IncomeController {
     const userId = req['userId'];
 
     const incomes = await this.incomeService.getIncomes(userId);
+    return { incomes };
+  }
+
+  @Delete()
+  async deleteIncome(
+    @Req() req: Request,
+    @Body('incomeId') incomeId: Types.ObjectId,
+  ) {
+    const userId = req['userId'];
+
+    const incomes = await this.incomeService.deleteIncome(userId, incomeId);
+
     return { incomes };
   }
 }
