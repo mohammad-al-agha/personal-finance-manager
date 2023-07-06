@@ -11,6 +11,9 @@ export enum IncomeCategories {
 
 @Schema()
 export class Income {
+  @Prop()
+  id: string;
+
   @Prop({ required: true })
   title: string;
 
