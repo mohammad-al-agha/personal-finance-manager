@@ -23,6 +23,11 @@ export class ExpenseService {
     //getting hthe user by id
     const user = await this.userModel.findById(id);
 
+    //checking if the user exsists
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
     //Extracting the props from the DTO
     const { title, amount, date, category } = createExpenseDto;
 
@@ -45,13 +50,51 @@ export class ExpenseService {
   }
 
   async getExpenses(userId: Types.ObjectId) {
-    //getting the user id from the request
+    //getting the user by id
     const user = await this.userModel.findById(userId);
 
     //checking if the user exists
     if (!user) {
       throw new HttpException('User not found', 404);
     }
+
+    return user.expenses;
+  }
+
+  async deleteExpense(userId: Types.ObjectId, expenseId: Types.ObjectId) {
+    //getting hthe user by id
+    const user = await this.userModel.findById(userId);
+
+    //checking if the user exsists
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
+    //gettimg the expense by id
+    const expense = await this.expenseModel.findById(expenseId);
+
+    //checking if the expense exists
+    if (!expense) {
+      throw new HttpException('No such expense', 404);
+    }
+
+    // Remove the expense from the user's expenses array
+    const removedExpenses = user.expenses.filter(
+      (exp) => exp.toString() !== expenseId.toString(),
+    );
+    // then check if it was found
+    if (removedExpenses.length === user.expenses.length) {
+      throw new HttpException('No such expense for this user', 404);
+    }
+
+    //update the user's expenses array
+    user.expenses = removedExpenses;
+
+    //saving all changes
+    await Promise.all([
+      user.save(),
+      this.expenseModel.findByIdAndDelete(expenseId),
+    ]);
 
     return user.expenses;
   }
