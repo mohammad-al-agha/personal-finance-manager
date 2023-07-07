@@ -6,11 +6,13 @@ import {
   Req,
   Get,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { createExpenseDTO } from './dto/createExpense';
 import { AuthGuard } from '../auth/auth.guards';
 import { Types } from 'mongoose';
+import { updateExpenseDto } from './dto/updateExpenseDTO';
 
 @Controller('expenses')
 @UseGuards(AuthGuard)
@@ -23,7 +25,7 @@ export class ExpenseController {
     @Req() req: Request,
   ) {
     //extracting the user id from the request
-    const userId = req['userId'];
+    const userId: Types.ObjectId = req['userId'];
 
     const expense = await this.expenseService.addExpense(
       createExpenseDTO,
@@ -36,7 +38,7 @@ export class ExpenseController {
   @Get()
   async getExpenses(@Req() req: Request) {
     //extracting the user id from the request
-    const userId = req['userId'];
+    const userId: Types.ObjectId = req['userId'];
 
     const expenses = await this.expenseService.getExpenses(userId);
 
@@ -52,6 +54,24 @@ export class ExpenseController {
     const userId: Types.ObjectId = req['userId'];
 
     const expenses = await this.expenseService.deleteExpense(userId, expenseId);
+
+    return { expenses };
+  }
+
+  @Put()
+  async editExpense(
+    @Req() req: Request,
+    @Body() updateExpenseDto: updateExpenseDto,
+  ) {
+    // Extracting the user id from the request
+    const userId: Types.ObjectId = req['userId'];
+    const expenseId: Types.ObjectId = updateExpenseDto.expenseId;
+
+    const expenses = await this.expenseService.editExpense(
+      userId,
+      expenseId,
+      updateExpenseDto,
+    );
 
     return { expenses };
   }
