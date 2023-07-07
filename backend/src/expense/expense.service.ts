@@ -4,6 +4,7 @@ import { Expense, ExpenseCategories } from './expenseModel';
 import mongoose, { Types } from 'mongoose';
 import { createExpenseDTO } from './dto/createExpense';
 import { User } from '../users/users.model';
+import { updateExpenseDto } from './dto/updateExpenseDTO';
 
 @Injectable()
 export class ExpenseService {
@@ -49,7 +50,7 @@ export class ExpenseService {
     return expense.save();
   }
 
-  async getExpenses(userId: Types.ObjectId) {
+  async getExpenses(userId: Types.ObjectId): Promise<Expense[]> {
     //getting the user by id
     const user = await this.userModel.findById(userId);
 
@@ -61,7 +62,10 @@ export class ExpenseService {
     return user.expenses;
   }
 
-  async deleteExpense(userId: Types.ObjectId, expenseId: Types.ObjectId) {
+  async deleteExpense(
+    userId: Types.ObjectId,
+    expenseId: Types.ObjectId,
+  ): Promise<Expense[]> {
     //getting hthe user by id
     const user = await this.userModel.findById(userId);
 
@@ -95,6 +99,51 @@ export class ExpenseService {
       user.save(),
       this.expenseModel.findByIdAndDelete(expenseId),
     ]);
+
+    return user.expenses;
+  }
+
+  async editExpense(
+    userId: Types.ObjectId,
+    expenseId: Types.ObjectId,
+    updateExpenseDto: updateExpenseDto,
+  ): Promise<Expense[]> {
+    //getting hthe user by id
+    const user = await this.userModel.findById(userId).populate('expenses');
+
+    //checking if the user exsists
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
+    //gettimg the expense by id
+    let expense = await this.expenseModel.findById(expenseId);
+
+    //checking if the expense exists
+    if (!expense) {
+      throw new HttpException('No such expense', 404);
+    }
+
+    //searching for the expense in the array of expenses of the user
+    const expenseIndex = user.expenses.findIndex(
+      (exp) => exp['_id'].toString() === expenseId.toString(),
+    );
+    //then checking if it exists
+    if (expenseIndex === -1) {
+      throw new HttpException('No such expense for this user', 404);
+    }
+
+    //updating the values after insuring that this expense is for this user
+    expense.title = updateExpenseDto.title;
+    expense.amount = updateExpenseDto.amount;
+    expense.date = updateExpenseDto.date;
+    expense.category = updateExpenseDto.category;
+
+    //updating the expense for the user
+    user.expenses[expenseIndex] = expense;
+
+    //saving all changes
+    await Promise.all([user.save(), expense.save()]);
 
     return user.expenses;
   }
